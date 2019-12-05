@@ -12,14 +12,17 @@ def main():
 
 
 
+
 def build_set_of_points(input):
-    points = set()
+    points = {}
     point = [0,0]
+    steps = 0
 
     for i in input:
         direc = i[0]
         dist = int(i[1:])
         for j in range(dist):
+            steps += 1
             if direc == 'R':
                 point[0] += 1
             elif direc == 'L':
@@ -28,20 +31,19 @@ def build_set_of_points(input):
                 point[1] += 1
             else:
                 point[1] -= 1
-            points.add((point[0], point[1]))
+            if (point[0], point[1]) not in points:
+                points[(point[0], point[1])] = steps
     return points
 
 
 def find_intersections(input1, input2):
-    intersect = input1.intersection(input2)
+    intersect = set(list(input1)).intersection(set(list(input2)))
 
     minDist = sys.maxsize
-    minPt = (0,0)
 
     for pt in intersect:
-        if (abs(pt[0]) + abs(pt[1])) < minDist:
-            minDist =abs(pt[0]) + abs(pt[1])
-            minPt = pt
+        if (input1[pt] + input2[pt]) < minDist:
+            minDist = input1[pt] + input2[pt]
 
     return minDist
 
